@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup • Smart Assistant</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <style>
+        :root {
+            --blue-dark: #0A1931;
+            --blue-primary: #1A3D63;
+            --blue-secondary: #4A7FA7;
+            --blue-light: #B3CFE5;
+            --blue-bg: #F4F9FD;
+        }
+
+        body {
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, var(--blue-light), var(--blue-bg));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .bubble {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(74, 127, 167, 0.35);
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0%   { transform: translateY(100vh) translateX(0); }
+            100% { transform: translateY(-10vh) translateX(30px); }
+        }
+
+        .signup-card {
+            width: 380px;
+            background: white;
+            padding: 30px;
+            border-radius: 22px;
+            box-shadow: 0 12px 30px rgba(26, 61, 99, 0.25);
+            border: 2px solid var(--blue-light);
+            animation: fadeIn 0.9s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-weight: bold;
+            color: var(--blue-primary);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        .btn-blue {
+            width: 100%;
+            background: linear-gradient(135deg, var(--blue-secondary), var(--blue-primary));
+            border: none;
+            padding: 10px;
+            color: white;
+            font-size: 18px;
+            border-radius: 10px;
+        }
+
+        .btn-blue:hover {
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
+        }
+
+        input.form-control {
+            border-radius: 12px;
+            border: 1px solid var(--blue-secondary);
+        }
+
+        a {
+            color: var(--blue-primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    for (let i = 0; i < 25; i++) {
+        let b = document.createElement("div");
+        b.className = "bubble";
+        b.style.left = Math.random() * 100 + "vw";
+        b.style.animationDelay = Math.random() * 6 + "s";
+        b.style.animationDuration = 8 + Math.random() * 6 + "s";
+        document.body.appendChild(b);
+    }
+});
+</script>
+
+<div class="signup-card">
+    <div class="title">Create Account ✨</div>
+
+    <form method="POST" action="/signup">
+        <input name="username" class="form-control mb-3" placeholder="Choose username" required>
+        <input name="pin" class="form-control mb-3" placeholder="Choose PIN" type="password" required>
+
+        <button class="btn-blue">Sign Up</button>
+    </form>
+
+    <p class="text-center mt-3">
+        Already have an account? <a href="/login">Login</a>
+    </p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Expenses • Smart Assistant</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --dark: #0A1931;
+      --blue: #1A3D63;
+      --mid: #4A7FA7;
+      --light: #B3CFE5;
+      --bg: #F6FAFD;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--light), var(--bg));
+      font-family: "Segoe UI", sans-serif;
+      padding: 30px;
+    }
+
+    .card-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      border: 2px solid var(--light);
+      box-shadow: 0 6px 20px rgba(26,61,99,0.2);
+    }
+
+    .section-title {
+      font-weight: 600;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+
+    .btn-blue {
+      background: linear-gradient(135deg, var(--mid), var(--blue));
+      color: white;
+      border: none;
+    }
+
+    .btn-blue:hover {
+      background: linear-gradient(135deg, var(--blue), var(--dark));
+    }
+
+    .badge-income { background: #43A047; }
+    .badge-expense { background: #E53935; }
+
+    canvas { max-height: 260px; }
+  </style>
+</head>
+
+<body>
+
+<a href="/dashboard" class="btn btn-outline-dark mb-4">⬅ Back</a>
+
+<h3 class="text-center mb-4">📊 Expense Dashboard — {{ month }}</h3>
+
+<div class="container-fluid">
+  <div class="row g-4">
+
+    <!-- LEFT -->
+    <div class="col-lg-8 d-flex flex-column gap-4">
+
+      <!-- SUMMARY -->
+      <div class="card-box text-center">
+        <div class="row">
+          <div class="col-md-4"><strong>Income</strong><br>₹{{ totals.income }}</div>
+          <div class="col-md-4"><strong>Expense</strong><br>₹{{ totals.expense }}</div>
+          <div class="col-md-4"><strong>Balance</strong><br>₹{{ totals.balance }}</div>
+        </div>
+
+        <div class="mt-3">
+          <a href="/transactions" class="btn btn-blue px-4">View Transactions</a>
+        </div>
+      </div>
+
+      <!-- MONTHLY COMPARISON -->
+      <div class="card-box">
+        <h6 class="section-title">📈 Monthly Comparison</h6>
+        <p>This Month: ₹{{ totals.expense }}</p>
+        <p>Last Month ({{ prev_month }}): ₹{{ prev_expense }}</p>
+
+        {% if diff > 0 %}
+          <p class="text-danger">⬆ Increased by ₹{{ diff }}</p>
+        {% elif diff < 0 %}
+          <p class="text-success">⬇ Decreased by ₹{{ diff | abs }}</p>
+        {% else %}
+          <p class="text-muted">No change from last month</p>
+        {% endif %}
+      </div>
+
+      <!-- BUDGET -->
+      <!-- BUDGET --> <div class="card-box"> <h6 class="section-title">💰 Budget Status</h6>
+         {% if budget_amount %} 
+         {% set budget_used_pct = (totals.expense / budget_amount * 100) | round(0) %} 
+         {% if budget_used_pct < 70 %} {% set bar_class = "bg-success" %}
+         {% elif budget_used_pct < 90 %} 
+         {% set bar_class = "bg-warning" %} 
+         {% else %} 
+         {% set bar_class = "bg-danger" %}
+         {% endif %} 
+         <p>Spent ₹{{ totals.expense }} of ₹{{ budget_amount }}</p> 
+         <div class="progress" style="height:18px;"> 
+            <div class="progress-bar {{ bar_class }}" role="progressbar" data-percent="{{ budget_used_pct }}"> 
+              {{ budget_used_pct }}% 
+            </div> 
+          </div> {% else %} 
+          <p class="text-muted">No budget set for this month.</p>
+          {% endif %} </div>
+
+      <!-- CHARTS -->
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card-box">
+            <h6 class="section-title text-center">Category Breakdown</h6>
+            <canvas id="catChart"></canvas>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card-box">
+            <h6 class="section-title text-center">Monthly Trend</h6>
+            <canvas id="monthChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-lg-4">
+      <div class="card-box">
+        <h6 class="section-title text-center">Recent Transactions</h6>
+
+        {% if recent %}
+          <ul class="list-group list-group-flush">
+            {% for r in recent %}
+              <li class="list-group-item d-flex justify-content-between">
+                <div>
+                  <strong>{{ r.description or 'Transaction' }}</strong><br>
+                  <small class="text-muted">{{ r.date }}</small>
+                </div>
+                <span class="badge {% if r.type=='income' %}badge-income{% else %}badge-expense{% endif %}">
+                  ₹{{ r.amount }}
+                </span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted text-center">No recent transactions</p>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CHART DATA -->
+<script id="chart-data" type="application/json">
+{
+  "labels": {{ categories_names | tojson }},
+  "values": {{ category_totals | tojson }},
+  "dates": {{ dates | tojson }},
+  "incomes": {{ incomes | tojson }},
+  "expenses": {{ expenses | tojson }}
+}
+</script>
+
+<script>
+const d = JSON.parse(document.getElementById("chart-data").textContent);
+
+new Chart(document.getElementById("catChart"), {
+  type: "pie",
+  data: {
+    labels: d.labels,
+    datasets: [{
+      data: d.values,
+      backgroundColor: ["#4A7FA7","#6FA0C8","#9BBFDA","#B3CFE5","#1A3D63"]
+    }]
+  }
+});
+
+new Chart(document.getElementById("monthChart"), {
+  type: "bar",
+  data: {
+    labels: d.dates,
+    datasets: [
+      { label: "Income", data: d.incomes, backgroundColor: "#6FA0C8" },
+      { label: "Expense", data: d.expenses, backgroundColor: "#B3CFE5" }
+    ]
+  },
+  options: { responsive: true }
+});
+</script>
+
+</body>
+</html>

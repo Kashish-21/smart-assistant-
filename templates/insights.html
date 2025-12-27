@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Insights • Smart Assistant</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --dark: #0A1931;
+      --blue: #1A3D63;
+      --mid: #4A7FA7;
+      --light: #B3CFE5;
+      --bg: #F6FAFD;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--light), var(--bg));
+      font-family: "Poppins", sans-serif;
+      padding: 30px;
+    }
+
+    .page-title {
+      color: var(--dark);
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .card-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 22px;
+      border: 2px solid var(--light);
+      box-shadow: 0 8px 24px rgba(26,61,99,0.18);
+      height: 100%;
+    }
+
+    .metric {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .label {
+      color: #666;
+      font-weight: 500;
+    }
+
+    .progress {
+      height: 18px;
+      border-radius: 10px;
+    }
+
+    .progress-bar {
+      font-weight: 600;
+    }
+
+    .highlight {
+      font-weight: 600;
+    }
+
+    .increase { color: #D32F2F; }
+    .decrease { color: #2E7D32; }
+
+    .icon {
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<a href="/dashboard" class="btn btn-outline-dark mb-4">⬅ Back</a>
+
+<h2 class="page-title text-center">🧠 Smart Insights</h2>
+
+<div class="container-fluid">
+  <div class="row g-4">
+
+    <!-- TASK INSIGHTS -->
+    <div class="col-lg-4">
+      <div class="card-box text-center">
+        <div class="icon">📝</div>
+        <div class="metric">{{ total_tasks }}</div>
+        <div class="label">Total Tasks</div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card-box text-center">
+        <div class="icon">✅</div>
+        <div class="metric">{{ completed_tasks }}</div>
+        <div class="label">Completed Tasks</div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card-box text-center">
+        <div class="icon">⏳</div>
+        <div class="metric">{{ pending_tasks }}</div>
+        <div class="label">Pending Tasks</div>
+      </div>
+    </div>
+
+    <!-- COMPLETION RATE -->
+    <div class="col-lg-12">
+      <div class="card-box">
+        <h5 class="mb-3">📈 Productivity Score</h5>
+
+        <p class="highlight">
+          Completion Rate: {{ completion_rate }}%
+        </p>
+
+        <div class="progress">
+  <div class="progress-bar bg-success"
+       data-progress="{{ completion_rate }}">
+    {{ completion_rate }}%
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPENSE INSIGHTS -->
+    <div class="col-lg-12">
+      <div class="card-box">
+        <h5 class="mb-2">💰 Spending Insight</h5>
+
+        <p class="mb-1">
+          Comparison: <strong>{{ month }}</strong> vs <strong>{{ prev_month }}</strong>
+        </p>
+
+        {% if expense_diff > 0 %}
+          <p class="increase">
+            ⬆ You spent ₹{{ expense_diff }} more than last month
+          </p>
+        {% elif expense_diff < 0 %}
+          <p class="decrease">
+            ⬇ You saved ₹{{ expense_diff | abs }} compared to last month
+          </p>
+        {% else %}
+          <p class="text-muted">
+            ➖ Spending unchanged from last month
+          </p>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

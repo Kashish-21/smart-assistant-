@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather • Smart Assistant</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root{
+            --blue-dark:#0A1931;
+            --blue-primary:#1A3D63;
+            --blue-secondary:#4A7FA7;
+            --blue-light:#B3CFE5;
+            --blue-bg:#F4F9FD;
+        }
+
+        body{
+            background:linear-gradient(135deg,var(--blue-light),var(--blue-bg));
+            padding:20px;
+            font-family:"Segoe UI",sans-serif;
+        }
+
+        .cute-card{
+            border-radius:20px;
+            background:#ffffff;
+            border:2px solid var(--blue-light);
+            padding:25px;
+            max-width:650px;
+            margin:auto;
+            box-shadow:0 8px 28px rgba(26,61,99,0.28);
+            transition:0.3s ease;
+        }
+
+        .cute-card:hover{
+            transform:translateY(-5px);
+            box-shadow:0 12px 32px rgba(26,61,99,0.38);
+        }
+
+        .cute-title{
+            font-weight:700;
+            font-size:26px;
+            color:var(--blue-primary);
+        }
+
+        .icon{
+            color:var(--blue-secondary);
+            font-size:26px;
+            margin-right:6px;
+        }
+
+        .form-control{
+            border-radius:14px;
+            border:1px solid var(--blue-light);
+            background:var(--blue-bg);
+        }
+
+        .form-control:focus{
+            border-color:var(--blue-secondary);
+            box-shadow:0 0 0 0.15rem rgba(74,127,167,.4);
+        }
+
+        .btn-blue{
+            background:linear-gradient(135deg,var(--blue-secondary),var(--blue-primary));
+            color:white;
+            border-radius:12px;
+            border:none;
+        }
+
+        .btn-blue:hover{
+            background:linear-gradient(135deg,var(--blue-primary),var(--blue-dark));
+            color:white;
+        }
+
+        /* Forecast cards */
+        .forecast-card{
+            border-radius:18px;
+            padding:20px;
+            background:var(--blue-bg);
+            border:2px solid var(--blue-light);
+            box-shadow:0 6px 20px rgba(26,61,99,0.25);
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="javascript:history.back()" class="btn btn-outline-primary mb-3">⬅ Back</a>
+
+<!-- Main Weather Card -->
+<div class="cute-card">
+
+    <h3 class="text-center cute-title mb-3">
+        <span class="icon">🌦️</span> Weather
+    </h3>
+
+    <form method="POST" class="mt-3 mb-4">
+        <div class="input-group">
+            <input type="text" name="city" class="form-control" value="{{ city }}" placeholder="Enter city...">
+            <button class="btn-blue px-4">Search</button>
+        </div>
+    </form>
+
+    {% if weather and weather.main %}
+        <div class="text-center">
+            <h4 style="color:var(--blue-primary);">{{ weather.name }}</h4>
+            <h1 style="color:var(--blue-secondary);">{{ weather.main.temp }}°C</h1>
+            <p class="text-muted">{{ weather.weather[0].description }}</p>
+        </div>
+    {% else %}
+        <p class="text-center text-muted">No weather data available</p>
+    {% endif %}
+</div>
+
+<!-- Forecast Section -->
+{% if forecast %}
+<div class="container mt-5">
+    <h4 class="text-center cute-title mb-3">
+        <span class="icon">📆</span> 3-Day Forecast
+    </h4>
+
+    <div class="row g-4 mt-2">
+
+        {% for f in forecast %}
+        <div class="col-md-4">
+            <div class="forecast-card text-center">
+
+                <h6 class="cute-title">{{ f.dt_txt }}</h6>
+                <h3 style="color:var(--blue-secondary);">{{ f.main.temp }}°C</h3>
+                <p class="text-muted small">{{ f.weather[0].description }}</p>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endif %}
+
+</body>
+</html>

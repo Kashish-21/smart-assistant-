@@ -1,0 +1,161 @@
+/* Color palette */
+:root {
+    --dark: #0A1931;
+    --blue: #1A3D63;
+    --mid: #4A7FA7;
+    --light: #B3CFE5;
+    --white: #F6FAFD;
+}
+
+/* Reset */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, var(--dark), var(--mid), var(--light));
+    background-size: 200% 200%;
+    animation: gradientMove 10s ease infinite;
+    min-height: 100vh;
+    color: var(--dark);
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Center container (login / signup) */
+.center-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Glass card */
+.card-glass {
+    width: 420px;
+    padding: 40px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(10, 25, 49, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-title {
+    color: var(--white);
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--light);
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Buttons */
+.btn-main {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: var(--blue);
+    color: var(--white);
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-main:hover {
+    background: var(--mid);
+}
+
+.btn-light {
+    width: 100%;
+    padding: 12px;
+    background: var(--light);
+    border-radius: 12px;
+    border: none;
+    color: var(--dark);
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+/* Inputs */
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--light);
+    margin-bottom: 15px;
+    background: #ffffffcc;
+}
+
+/* Dashboard header */
+.dashboard-header {
+    text-align: center;
+    padding: 30px;
+    color: var(--white);
+    font-size: 32px;
+    font-weight: 600;
+}
+
+/* ===================== */
+/* ✅ CALENDAR SUPPORT */
+/* ===================== */
+
+.card-box {
+    background: #ffffff;
+    border-radius: 22px;
+    border: 2px solid var(--light);
+    box-shadow: 0 8px 25px rgba(26, 61, 99, 0.18);
+    padding: 20px;
+    width: 100%;
+}
+
+#calendar {
+    width: 100%;
+    min-height: 520px;
+}
+
+/* Responsive fixes */
+@media (max-width: 992px) {
+    #calendar {
+        min-height: 450px;
+    }
+
+    .card-glass {
+        width: 100%;
+        padding: 30px;
+    }
+
+    .dashboard-header {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 576px) {
+    #calendar {
+        min-height: 400px;
+    }
+
+    .card-glass {
+        padding: 25px;
+    }
+
+    .card-title {
+        font-size: 22px;
+    }
+}

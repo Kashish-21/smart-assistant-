@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News • Smart Assistant</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+    body {
+        background: linear-gradient(135deg, #B3CFE5, #F6FAFD);
+        padding: 25px;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    h3 {
+        color: #0A1931;
+        font-weight: 700;
+    }
+
+    .news-card {
+        border-radius: 18px;
+        background: #F6FAFD;
+        border: 2px solid #B3CFE5;
+        box-shadow: 0 6px 18px rgba(26, 61, 99, 0.18);
+        overflow: hidden;
+        transition: 0.3s ease;
+    }
+
+    .news-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 24px rgba(26, 61, 99, 0.25);
+    }
+
+    .news-img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .btn-read {
+        background: linear-gradient(135deg, #4A7FA7, #1A3D63);
+        color: white;
+        border-radius: 10px;
+        border: none;
+        padding: 6px 12px;
+    }
+
+    .btn-read:hover {
+        opacity: 0.9;
+        color: white;
+    }
+
+    .text-muted {
+        color: #4A7FA7 !important;
+    }
+</style>
+
+</head>
+
+<body>
+
+<a href="javascript:history.back()" class="btn btn-outline-primary mb-3">⬅ Back</a>
+
+<h3 class="text-center mb-4">📰 Latest News ({{ category }})</h3>
+
+<div class="container">
+    <div class="row g-4">
+
+        {% if not news_list %}
+            <p class="text-center text-muted">No news available</p>
+        {% endif %}
+
+        {% for n in news_list %}
+        <div class="col-md-4">
+            <div class="news-card">
+                <img src="{{ n.urlToImage or 'https://via.placeholder.com/400x200' }}" class="news-img">
+
+                <div class="p-3">
+                    <h6>{{ n.title }}</h6>
+                    <p class="small text-muted">{{ n.description }}</p>
+
+                    <a href="{{ n.url }}" target="_blank" class="btn btn-read btn-sm">
+                        Read More
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+</body>
+</html>
