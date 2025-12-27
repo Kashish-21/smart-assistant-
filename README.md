@@ -50,4 +50,49 @@ This project helps users manage **tasks, expenses, calendar events, productivity
 ---
 
 ## 📂 Project Structure
+smart-assistant/
+├── app.py
+├── database.py
+├── assistant.db
+├── .env
+├── statics/
+│ ├── style.css
+│ └── script.js
+└── templates/
+├── dashboard.html
+├── todo.html
+├── calendar.html
+├── expenses_dashboard.html
+├── transactions.html
+├── insights.html
+└── ...
 
+## ▶️ How to Run Locally
+
+```bash
+# Activate virtual environment
+.venv\Scripts\activate
+
+# Install dependencies
+pip install flask python-dotenv requests
+
+# Run the app
+python app.py
+
+
+👩‍💻 Author
+
+Kashish
+B.Tech CSE | Python & Web Development
+
+⭐ Future Enhancements
+
+User-wise analytics
+
+Email notifications
+
+Dark mode
+
+Cloud deployment
+
+⭐ If you like this project, give it a star!
